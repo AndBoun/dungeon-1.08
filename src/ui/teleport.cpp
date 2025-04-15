@@ -13,7 +13,7 @@ bool ui::teleport(Dungeon &d){
 
     int x = d.getPC().getPosition().getX();
     int y = d.getPC().getPosition().getY();
-    char prev = d.getPC().getCurrentCell().getType();
+    char prev = d.getGrid()[y][x].getType();
 
     render_top_bar(COLOR_PLAYER_ID, "In teleport mode, press 'g' to teleport, 'r' to randomize, or 'q' to quit");
 
@@ -21,7 +21,7 @@ bool ui::teleport(Dungeon &d){
         prev = grid_copy[y][x].getType();
         grid_copy[y][x].setType('*');
 
-        render_grid(grid_copy);
+        render_grid(d, grid_copy);
 
         grid_copy[y][x].setType(prev);
 
@@ -97,9 +97,9 @@ bool ui::teleport(Dungeon &d){
             
             case 'q':
                 if (d.getFogStatus()) {
-                    render_grid(d.getFog());
+                    render_grid(d, d.getFog(), true /* fog is on */);
                 } else {
-                    render_grid(d.getGrid());
+                    render_grid(d, d.getGrid());
                 }
                 render_top_bar(COLOR_SUCCESS_ID, "Teleport cancelled");
                 return false;

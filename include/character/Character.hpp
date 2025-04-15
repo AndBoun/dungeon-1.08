@@ -10,29 +10,29 @@
 
 class Character
 {
-protected:
+public:
     Point position; // Position of the character
     int speed;
-    Cell currentCell; // Current cell character is in
+    // Cell currentCell; // Current cell character is in
     char symbol; // Symbol to represent the character
     bool alive;
     int ID;
 
-public:
+    // Constructor and Destructor
     Character();
-    Character(Point position, int speed, Cell current_cell, char symbol, bool alive, int ID);
+    Character(Point position, int speed, char symbol, bool alive, int ID);
     virtual ~Character();
 
     // Getters
     virtual const Point& getPosition() const;
     virtual int getSpeed() const;
-    virtual const Cell& getCurrentCell() const;
+    // virtual const Cell& getCurrentCell() const;
     virtual char getSymbol() const;
     virtual bool isAlive() const;
 
     // Setters
     virtual void setPosition(Point position);
-    virtual void setCurrentCell(Cell current_cell);
+    // virtual void setCurrentCell(Cell current_cell);
     virtual void setAlive(bool Alive);
 };
     

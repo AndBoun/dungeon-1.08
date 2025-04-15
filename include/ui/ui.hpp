@@ -33,8 +33,9 @@ class ui {
         
         // Rendering methods
         static void render_top_bar(int color_id, const char *format, ...);
-        static void render_grid(std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> grid);
+        static void render_grid(const Dungeon &d, const std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> &grid, bool is_fog_on = false);
         static void render_game_over(Dungeon &d);
+        // static void render_fog_grid(Dungeon &d);
         static bool teleport(Dungeon &d);
         
         // Input handling

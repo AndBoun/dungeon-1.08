@@ -41,23 +41,20 @@ int Dungeon:: movePC(int x, int y, bool teleport){
     }
 
     // Check if the new cell is occupied, and kill the occupant
-    if (
-        (getGrid()[y][x].getType() >= '0' && getGrid()[y][x].getType() <= '9') || 
-        (getGrid()[y][x].getType() >= 'A' && getGrid()[y][x].getType() <= 'F')
-    ){
+    if (getNPCID(x, y) != -1){
         // printf("Player killed a monster: %c\n", d->grid[y][x].type);
         killNPC(x, y);
     }
 
     // printf("Player moved from (%d, %d) to (%d, %d)\n", d->pc.x, d->pc.y, x, y);
 
-    modifyGrid()[pcY][pcX].setType(getPC().getCurrentCell().getType()); // return the cell to its original type
-    getPC().setCurrentCell(getGrid()[y][x]); // update the current cell
-    modifyGrid()[y][x].setType(PLAYER); // update the grid with the player type
+    // modifyGrid()[pcY][pcX].setType(getPC().getCurrentCell().getType()); // return the cell to its original type
+    // getPC().setCurrentCell(getGrid()[y][x]); // update the current cell
+    // modifyGrid()[y][x].setType(PLAYER); // update the grid with the player type
 
-    if (teleport) {
-        fog[pcY][pcX].setType(grid[pcY][pcX].getType()); // update the fog grid
-    }
+    // if (teleport) {
+    //     fog[pcY][pcX].setType(grid[pcY][pcX].getType()); // update the fog grid
+    // }
 
     getPC().setPosition(Point(x, y)); // update the player position
 

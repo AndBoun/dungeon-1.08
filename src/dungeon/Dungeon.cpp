@@ -30,69 +30,9 @@ void Dungeon::generateRandomDungeon()
         generateCorridors();
         generateStairs();
         placeCharacterRandomly(pc); // Place the player character randomly
-        fog[pc.getPosition().getY()][pc.getPosition().getX()].setType(pc.getSymbol());
+        // fog[pc.getPosition().getY()][pc.getPosition().getX()].setType(pc.getSymbol());
         break;
     } while (true);
-}
-
-bool Dungeon::placeNPCsRandomly(int numNPCS)
-{
-    for (int i = 0; i < numNPCS; i++) {
-        NPC npc = NPC(Point(), Cell(), true, i);
-        if (placeCharacterRandomly(npc)) {
-            npcs.push_back(npc);
-        }
-    }
-    return true;
-}
-
-// this function should not be called, dungeon starts empty
-void Dungeon::init_fog_grid(){
-    for (int y = 0; y < DUNGEON_HEIGHT; y++) {
-        for (int x = 0; x < DUNGEON_WIDTH; x++) {
-            Cell cell = grid[y][x];
-            fog[y][x].setCell(cell.getHardness(), cell.getType());
-        }
-    }
-}
-
-void Dungeon::update_fog_grid(){
-    for (int y = 0; y < DUNGEON_HEIGHT; y++) {
-        for (int x = 0; x < DUNGEON_WIDTH; x++) {
-            char cell_type = fog[y][x].getType();
-            if ((cell_type >= '0' && cell_type <= '9') || (cell_type >= 'A' && cell_type <= 'F')) {
-                fog[y][x].setType(fog[y][x].getOldType()); // Restore the old type
-            }
-        }
-    }
-
-    int pc_x = pc.getPosition().getX();
-    int pc_y = pc.getPosition().getY();
-
-    int start_x = std::max(0, pc_x - 2);
-    int end_x = std::min(DUNGEON_WIDTH - 1, pc_x + 2);
-
-    int start_y = std::max(0, pc_y - 2);
-    int end_y = std::min(DUNGEON_HEIGHT - 1, pc_y + 2);
-
-    for (int y = start_y; y <= end_y; y++) {
-        for (int x = start_x; x <= end_x; x++) {
-            // Update the fog with the actual grid cell
-            fog[y][x] = grid[y][x];
-            char cell_type = fog[y][x].getType();
-            if ((cell_type >= '0' && cell_type <= '9') || (cell_type >= 'A' && cell_type <= 'F')) {
-                fog[y][x].setOldType(npcs[getNPCID(x, y)].getCurrentCell().getType()); // Store the old type
-            }
-        }
-    }
-}
-
-void Dungeon::reset_fog_grid(){
-    for (int y = 0; y < DUNGEON_HEIGHT; y++) {
-        for (int x = 0; x < DUNGEON_WIDTH; x++) {
-            fog[y][x].setCell(MAX_HARDNESS, ROCK); // Reset to rock
-        }
-    }
 }
 
 int Dungeon::startGameplay(int numNPCS){
@@ -109,7 +49,7 @@ int Dungeon::startGameplay(int numNPCS){
     // Initialize the priority queue with the player and monsters
     // entity = (0) is the player, PLAYER_ID
     // entity = (i + 1), are the monsters, where i = index or monster_ID
-    pq_insert(pq, 0, NULL, PLAYER_ID);
+    pq_insert(pq, PLAYER_ID, NULL, 0);
     for (size_t i = 0; i < getNPCs().size(); i++){
         pq_insert(pq, i + 1, NULL, 0); // all entities start at time 0
     }
@@ -124,13 +64,13 @@ int Dungeon::startGameplay(int numNPCS){
 
 
         if (entity_id == PLAYER_ID) { // Player's turn
-            // ui::render_grid(*this); // Render the dungeon
+
             update_fog_grid(); // Update the fog of war
-            // ui::render_grid(fog); // Render the fog of war
+        
             if (getFogStatus()) {
-                ui::render_grid(getFog());
+                ui::render_grid((*this), getFog(), true); // Render the fog grid
             } else {
-                ui::render_grid(getGrid());
+                ui::render_grid((*this), getGrid());
             }
             if (ui::get_input(*this) == -2){
                 pq_destroy(pq);

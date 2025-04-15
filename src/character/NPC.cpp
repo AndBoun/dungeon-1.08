@@ -3,21 +3,22 @@
 //
 
 #include <character/NPC.hpp>
+#include <dungeon/Dungeon.hpp>
 #include <math.h>
 
 NPC::~NPC() {}
 
-NPC::NPC() : Character(Point(), 0, Cell(), '!', false, 0) {}
+NPC::NPC() : Character(Point(), 0, '!', false, 0) {}
 
-NPC::NPC(Point position, Cell cell, bool isAlive, int ID){
+NPC::NPC(Point position, bool isAlive, int ID){
     intelligent = rand() % 2, telepathy = rand() % 2;
     tunneling = rand() % 2, erratic = rand() % 2;
 
     // intelligent = 1, telepathy = 1;
     // tunneling = 1, erratic = 1;
 
-    // speed = (rand() % 16) + 5;
-    speed = Dice(0, 1, 16);
+    speed = (rand() % 16) + 5;
+    // speed = Dice(0, 1, 16);
 
     this->position = position;
 
@@ -38,7 +39,19 @@ NPC::NPC(Point position, Cell cell, bool isAlive, int ID){
 
     this->alive = isAlive;
     this->ID = ID;
-    this->currentCell = cell;
+}
+
+int Dungeon::getNPCID(int x, int y) const{
+    for (size_t i = 0; i < npcs.size(); i++){
+        if (npcs[i].getPosition().getX() == x && npcs[i].getPosition().getY() == y){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Dungeon::getNPCID(Point p) const{
+    return getNPCID(p.getX(), p.getY());
 }
 
 std::ostream &NPC::print(std::ostream &os) const {
@@ -50,13 +63,13 @@ std::ostream &NPC::print(std::ostream &os) const {
     for (const auto &c : color) {
         os << c << " ";
     }
-    os << "\n" << NPC_SPEED << " " << speed;
+    os << "\n" << NPC_SPEED << " " << dice_speed;
     os << "\n" << NPC_ABIL << " ";
     for (const auto &a : abil) {
         os << a << " ";
     }
-    os << "\n" << NPC_HP << " " << hp;
-    os << "\n" << NPC_DAM << " " << dam;
+    os << "\n" << NPC_HP << " " << dice_hp;
+    os << "\n" << NPC_DAM << " " << dice_dam;
     os << "\n" << NPC_SYMB << " " << symb;
     os << "\n" << NPC_RRTY << " " << rrty;
     os << "\n" << NPC_END << "\n";

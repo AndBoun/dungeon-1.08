@@ -42,20 +42,36 @@ public:
     std::string desc;
     std::string type;
     std::string color;
-    Dice hit;
-    Dice dam;
-    Dice dodge;
-    Dice def;
-    Dice weight;
-    Dice speed;
-    Dice attr;
-    Dice val;
+
+    int hit;
+    Dice dice_hit;
+    
+    Dice dice_dam;
+
+    int dodge;
+    Dice dice_dodge;
+
+    int def;
+    Dice dice_def;
+
+    int weight;
+    Dice dice_weight;
+    
+    int speed;
+    Dice dice_speed;
+
+    int attr;
+    Dice dice_attr;
+    
+    int val;
+    Dice dice_val;
+
     std::string art;
     int rrty;
 
     Item();
     Item(std::string name, std::string desc, std::string type, std::string color,
-         Dice hit, Dice dam, Dice dodge, Dice def, Dice weight, Dice speed,
+         Dice hit, Dice dice_dam, Dice dodge, Dice def, Dice weight, Dice speed,
          Dice attr, Dice val, std::string art, int rrty);
     ~Item();
 

@@ -22,6 +22,8 @@ class Point
         void setX(int x);
         void setY(int y);
         void setPoint(int x, int y);
+        bool operator==(const Point& other) const;
+        bool operator!=(const Point& other) const;
 };
 
 #endif

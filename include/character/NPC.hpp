@@ -44,10 +44,12 @@ public:
     std::string name;
     std::string desc;
     std::vector<std::string> color;
-    Dice speed;
+    // int speed; declared in character
+    Dice dice_speed;
     std::vector<std::string> abil;
-    Dice hp;
-    Dice dam;
+    int hp;
+    Dice dice_hp;
+    Dice dice_dam;
     char symb;
     int rrty;
 
@@ -55,7 +57,7 @@ public:
 
 
     NPC();
-    NPC(Point position, Cell cell, bool isAlive, int ID);
+    NPC(Point position, bool isAlive, int ID);
     ~NPC();
 
     static std::vector<NPC> NPCParser();

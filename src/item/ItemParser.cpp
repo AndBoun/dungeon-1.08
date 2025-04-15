@@ -82,7 +82,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_HIT){
             if (hit) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.hit = tempDice.value();
+                item.dice_hit = tempDice.value();
             } else {
                 return std::nullopt;
             }
@@ -91,7 +91,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_DAM){
             if (dam) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.dam = tempDice.value();
+                item.dice_dam = tempDice.value();
                 dam = true;
             } else {
                 return std::nullopt;
@@ -100,7 +100,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_DODGE){
             if (dodge) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.dodge = tempDice.value();
+                item.dice_dodge = tempDice.value();
                 dodge = true;
             } else {
                 return std::nullopt;
@@ -109,7 +109,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_DEF){
             if (def) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.def = tempDice.value();
+                item.dice_def = tempDice.value();
                 def = true;
             } else {
                 return std::nullopt;
@@ -118,7 +118,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_WEIGHT){
             if (weight) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.weight = tempDice.value();
+                item.dice_weight = tempDice.value();
                 weight = true;
             } else {
                 return std::nullopt;
@@ -127,7 +127,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_SPEED){
             if (speed) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.speed = tempDice.value();
+                item.dice_speed = tempDice.value();
                 speed = true;
             } else {
                 return std::nullopt;
@@ -136,7 +136,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_ATTR){
             if (attr) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.attr = tempDice.value();
+                item.dice_attr = tempDice.value();
                 attr = true;
             } else {
                 return std::nullopt;
@@ -145,7 +145,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         else if (word == ITEM_VAL){
             if (val) return std::nullopt;
             if (auto tempDice = NPC::handleDice(ss)){
-                item.val = tempDice.value();
+                item.dice_val = tempDice.value();
                 val = true;
             } else {
                 return std::nullopt;

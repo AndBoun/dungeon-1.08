@@ -6,20 +6,13 @@
 #include <pathfinding/Dijkstras.hpp>
 #include <math.h>
 
-int Dungeon:: getNPCID(int x, int y) const{
-    for (size_t i = 0; i < npcs.size(); i++){
-        if (npcs[i].getPosition().getX() == x && npcs[i].getPosition().getY() == y){
-            return i;
-        }
-    }
-    return -1;
-}
+
 
 bool Dungeon:: killNPC(int x, int y){
     int ID = getNPCID(x, y);
     if (ID == -1) return 0;
 
-    modifyGrid()[y][x].setType(getNPCs()[ID].getCurrentCell().getType());
+    // modifyGrid()[y][x].setType(getNPCs()[ID].getCurrentCell().getType());
     npcs[ID].setPosition(Point(-1, -1));
     npcs[ID].setAlive(false);
     numMonsterAlive--;
@@ -281,8 +274,8 @@ Point Dungeon:: get_next_unintelligent_move(NPC &npc, int tunneling){
 }
 
 int Dungeon:: move_non_tunnel(NPC &npc, int new_x, int new_y){
-    int m_x = npc.getPosition().getX();
-    int m_y = npc.getPosition().getY();
+    // int m_x = npc.getPosition().getX();
+    // int m_y = npc.getPosition().getY();
     // int m_pc_x = npc.getPCPostion().getX();
     // int m_pc_y = npc.getPCPostion().getY();
 
@@ -292,16 +285,17 @@ int Dungeon:: move_non_tunnel(NPC &npc, int new_x, int new_y){
     if (!is_valid_move_non_tunnel(new_x, new_y)) return 0;
 
     // Check if the new cell is occupied, and kill the occupant
-    if (getGrid()[new_y][new_x].getType() != FLOOR &&
-        getGrid()[new_y][new_x].getType() != CORRIDOR &&
-        getGrid()[new_y][new_x].getType() != UP_STAIR &&
-        getGrid()[new_y][new_x].getType() != DOWN_STAIR
+    if (
+        getNPCID(new_x, new_y) != -1 || pc.getPosition() == Point(new_x, new_y)
     ){
-        if (getGrid()[new_y][new_x].getType() == PLAYER){
+        if (
+            // getGrid()[new_y][new_x].getType() == PLAYER 
+            pc.getPosition() == Point(new_x, new_y)
+        ){
             // kill player and return cell to original type
             // printf("Monster %c killed the player\n", m->symbol);
-            getPC().setAlive(false);
-            modifyGrid()[new_y][new_x].setType(getPC().getCurrentCell().getType());
+            pc.setAlive(false);
+            // modifyGrid()[new_y][new_x].setType(getPC().getCurrentCell().getType());
         }
         else{
             // printf("Monster %c killed a monster %c\n", m->symbol, d->grid[new_y][new_x].type);
@@ -316,9 +310,9 @@ int Dungeon:: move_non_tunnel(NPC &npc, int new_x, int new_y){
     // d->grid[new_y][new_x].type = m->symbol;    // update the new cell to the monster's symbol
     // m->x = new_x, m->y = new_y;                // update the monster's position
 
-    modifyGrid()[m_y][m_x].setType(npc.getCurrentCell().getType()); // return the cell to its original type
-    npc.setCurrentCell(getGrid()[new_y][new_x]); // update the current cell
-    modifyGrid()[new_y][new_x].setType(npc.getSymbol()); // update the grid with the monster type
+    // modifyGrid()[m_y][m_x].setType(npc.getCurrentCell().getType()); // return the cell to its original type
+    // npc.setCurrentCell(getGrid()[new_y][new_x]); // update the current cell
+    // modifyGrid()[new_y][new_x].setType(npc.getSymbol()); // update the grid with the monster type
     npc.setPosition(Point(new_x, new_y)); // update the monster position
 
     return 0;
@@ -329,11 +323,16 @@ int Dungeon:: move_tunnel(NPC &npc, int new_x, int new_y){
         return 0;
 
     // Burrow through the wall
-    if (getGrid()[new_y][new_x].getHardness() <= 85 && getGrid()[new_y][new_x].getHardness() > 0)
-    {
+    if (
+        getGrid()[new_y][new_x].getHardness() <= 85 && 
+        getGrid()[new_y][new_x].getHardness() > 0
+    ){
         // kill player, should only occur if player teleports into rock
-        if (grid[new_y][new_x].getType() == PLAYER){
-            getPC().setAlive(false);
+        if (
+            // grid[new_y][new_x].getType() == PLAYER
+            pc.getPosition() == Point(new_x, new_y)
+        ){
+            pc.setAlive(false);
         }
 
         modifyGrid()[new_y][new_x].setHardness(0);

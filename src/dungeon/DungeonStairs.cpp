@@ -56,6 +56,11 @@ bool Dungeon::isUpStair(int x, int y) const {
     }
     return false;
 }
+
+bool Dungeon::isUpStair(Point p) const {
+    return isUpStair(p.getX(), p.getY());
+}
+
 bool Dungeon::isDownStair(int x, int y) const {
     for (const Stair& stair : down_stairs) {
         if (stair.getX() == x && stair.getY() == y) {
@@ -63,4 +68,8 @@ bool Dungeon::isDownStair(int x, int y) const {
         }
     }
     return false;
+}
+
+bool Dungeon::isDownStair(Point p) const {
+    return isDownStair(p.getX(), p.getY());
 }

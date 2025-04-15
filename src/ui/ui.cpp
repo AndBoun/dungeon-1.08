@@ -62,26 +62,48 @@ void ui::render_top_bar(int color_id, const char *format, ...) {
     refresh();
 }
 
-void ui::render_grid(std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> grid) {
-    // clear();
-    
+void ui::render_grid(const Dungeon &d, const std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> &grid, bool is_fog_on) {
+
+    // Get player position and radius
+    int pc_x = d.pc.getPosition().getX();
+    int pc_y = d.pc.getPosition().getY();
+
+    int start_x = std::max(0, pc_x - 2);
+    int end_x = std::min(DUNGEON_WIDTH - 1, pc_x + 2);
+
+    int start_y = std::max(0, pc_y - 2);
+    int end_y = std::min(DUNGEON_HEIGHT - 1, pc_y + 2);
+
     // Draw the dungeon grid with colors based on cell type
-    for (int i = 0; i < DUNGEON_HEIGHT; i++) {
+    for (int y = 0; y < DUNGEON_HEIGHT; y++) {
         
-        for (int j = 0; j < DUNGEON_WIDTH; j++) {
-            char cell_type = grid[i][j].getType();
+        for (int x = 0; x < DUNGEON_WIDTH; x++) {
+            char cell_type = grid[y][x].getType();
+            Point current_point = Point(x, y);
             attron(COLOR_PAIR(COLOR_DEFAULT_ID)); 
             
-            // Choose color based on cell type
-            if (cell_type == PLAYER) {
-                attron(COLOR_PAIR(COLOR_PLAYER_ID));
-            } else if (cell_type == UP_STAIR || cell_type == DOWN_STAIR) {
+
+            if (d.isUpStair(current_point) || d.isDownStair(current_point)) {
                 attron(COLOR_PAIR(COLOR_STAIR_ID));
-            } else if ((cell_type >= '0' && cell_type <= '9') || (cell_type >= 'A' && cell_type <= 'F')) {
-                attron(COLOR_PAIR(COLOR_MONSTER_ID));
+            }
+
+            if ( // only render player and monsters in radius if fog is on
+                !is_fog_on || (
+                    (x >= start_x && x <= end_x) &&
+                    (y >= start_y && y <= end_y)
+                )
+            ){
+                if (current_point == d.pc.getPosition()){
+                    attron(COLOR_PAIR(COLOR_PLAYER_ID));
+                    cell_type = (cell_type == '*') ? '*' : d.pc.getSymbol();
+                }
+                else if (d.getNPCID(current_point) != -1) {
+                    attron(COLOR_PAIR(COLOR_MONSTER_ID));
+                    cell_type = (cell_type == '*') ? '*' : d.npcs[d.getNPCID(current_point)].getSymbol();
+                }
             }
             
-            mvaddch(i + 1, j, cell_type);
+            mvaddch(y + 1, x, cell_type);
         }
     }
 
@@ -92,7 +114,7 @@ void ui::render_grid(std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT>
 void ui::render_game_over(Dungeon &d) {
     clear();
     
-    render_grid(d.getGrid());
+    render_grid(d, d.getGrid()); // Render the grid without fog
     
     if (!d.getPC().isAlive()) {
         render_top_bar(COLOR_ERROR_ID, "Player Died, press 'q' to quit");
@@ -107,7 +129,7 @@ void ui::render_game_over(Dungeon &d) {
     do {
         timeout(-1);
         input = getch();
-    } while (input != 'q');
+    } while (input != 'q' && input != 'Q');
 }
 
 int ui::get_input(Dungeon &d) {
@@ -177,15 +199,22 @@ int ui::get_input(Dungeon &d) {
                 d.setFogStatus(!d.getFogStatus());
                 if (d.getFogStatus()) {
                     render_top_bar(COLOR_SUCCESS_ID, "Fog of War Enabled");
-                    render_grid(d.getFog());
+                    render_grid(d, d.getFog(), true); // fog is on
                 } else {
                     render_top_bar(COLOR_SUCCESS_ID, "Fog of War Disabled");
-                    render_grid(d.getGrid());
+                    render_grid(d, d.getGrid()); // fog is off
                 }
                 continue;
             
             case 'g':
-                if (teleport(d)) result = 1;
+                // if (teleport(d)) result = 1;
+                teleport(d);
+                if (d.getNumMonsters() == 0) result = 1; // all monsters dead, stop game by returning
+                if (d.getFogStatus()) {
+                    render_grid(d, d.getFog(), true); // fog is on
+                } else {
+                    render_grid(d, d.getGrid()); // fog is off
+                }
                 break;
 
 

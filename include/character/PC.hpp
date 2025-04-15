@@ -14,7 +14,7 @@ class PC : public Character
 {
 public:
     PC();
-    PC(Point position, Cell current_cell);
+    PC(Point position);
     ~PC();
 };
 

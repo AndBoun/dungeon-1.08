@@ -74,7 +74,7 @@ std::optional<NPC> NPC::parseMonster(std::ifstream &file){
         else if (word == NPC_SPEED){
             if (speed) return std::nullopt;
             if (auto tempDice = handleDice(ss)){
-                npc.speed = tempDice.value();
+                npc.dice_speed = tempDice.value();
                 speed = true;
             } else {
                 return std::nullopt;
@@ -92,7 +92,7 @@ std::optional<NPC> NPC::parseMonster(std::ifstream &file){
         else if (word == NPC_HP){
             if (hp) return std::nullopt;
             if (auto tempDice = handleDice(ss)){
-                npc.hp = tempDice.value();
+                npc.dice_hp = tempDice.value();
                 hp = true;
             } else {
                 return std::nullopt;
@@ -101,7 +101,7 @@ std::optional<NPC> NPC::parseMonster(std::ifstream &file){
         else if (word == NPC_DAM){
             if (dam) return std::nullopt;
             if (auto tempDice = handleDice(ss)){
-                npc.dam = tempDice.value();
+                npc.dice_dam = tempDice.value();
                 dam = true;
             } else {
                 return std::nullopt;

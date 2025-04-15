@@ -56,7 +56,7 @@ const int MOVEMENT_STAIRS = -2;
 
 class Dungeon
 {
-protected:
+public:
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> grid;
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> fog;
     std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT> nonTunnelingDistanceMap;
@@ -71,10 +71,8 @@ protected:
     int numMonsterAlive;
 
     bool isFog = true; // Flag to indicate if fog of war is enabled
-
-
-
-public:
+    
+    // Constructor and Destructor
     Dungeon();
     ~Dungeon();
 
@@ -127,6 +125,13 @@ public:
     void printDungeon() const;
     void printDistanceMap(const std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT> &distanceMap) const;
 
+    bool isUpStair(int x, int y) const;
+    bool isUpStair(Point p) const;
+    bool isDownStair(int x, int y) const;
+    bool isDownStair(Point p) const;
+    
+    int getNPCID(int x, int y) const;
+    int getNPCID(Point p) const;
 
 private:
     void initializeCells();
@@ -140,9 +145,6 @@ private:
 
     int calculateTiming(int speed) { return 1000 / speed; }
 
-    int getNPCID(int x, int y) const;
-    bool isUpStair(int x, int y) const;
-    bool isDownStair(int x, int y) const;
 
     bool hasLineOfSight(int x, int y);
     int is_valid_move_non_tunnel(int x, int y);
@@ -153,7 +155,7 @@ private:
     int move_non_tunnel(NPC &npc, int new_x, int new_y);
     int move_tunnel(NPC &npc, int new_x, int new_y);
 
-    void init_fog_grid();
+    // void init_fog_grid();
     void update_fog_grid();
     void reset_fog_grid(); // reset to original grid, then update fog grid
 };
