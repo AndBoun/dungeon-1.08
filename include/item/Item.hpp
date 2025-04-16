@@ -10,10 +10,12 @@
 #include <vector>
 #include <optional>
 #include <set>
+#include <utils/Point.hpp>
 
 class Item
 {
 public:
+    Point pos;
     std::string name;
     std::string desc;
     std::string type;

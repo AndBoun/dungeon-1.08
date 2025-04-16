@@ -6,17 +6,27 @@
 #include <pathfinding/Dijkstras.hpp>
 #include <math.h>
 
-
-
 bool Dungeon:: killNPC(int x, int y){
     int ID = getNPCID(x, y);
     if (ID == -1) return 0;
 
     // modifyGrid()[y][x].setType(getNPCs()[ID].getCurrentCell().getType());
-    npcs[ID].setPosition(Point(-1, -1));
-    npcs[ID].setAlive(false);
+    npcs[ID]->setPosition(Point(-1, -1));
+    npcs[ID]->setAlive(false);
     numMonsterAlive--;
+
+    // Disable generation of unique NPCs once killed
+    if (npcs[ID]->unique){
+        npcDescList[npcs[ID]->descID].canBeGenerated = false;
+    }
+
     return 0;
+}
+
+bool Dungeon::killPC(){
+    pc.setPosition(Point(-1, -1));
+    pc.setAlive(false);
+    return true;
 }
 
 bool Dungeon:: hasLineOfSight(int x, int y) {
@@ -129,13 +139,13 @@ Point Dungeon:: get_next_random_move(int x, int y, int tunneling){
     return p;
 }
 
-Point Dungeon:: get_next_intelligent_move(NPC &npc, int tunneling){
+Point Dungeon:: get_next_intelligent_move(NPC *npc, int tunneling){
     const int INF = 99999999;
 
-    int m_x = npc.getPosition().getX();
-    int m_y = npc.getPosition().getY();
-    int m_pc_x = npc.getPCPostion().getX();
-    int m_pc_y = npc.getPCPostion().getY();
+    int m_x = npc->getPosition().getX();
+    int m_y = npc->getPosition().getY();
+    int m_pc_x = npc->getPCPostion().getX();
+    int m_pc_y = npc->getPCPostion().getY();
 
     int pc_x = getPC().getPosition().getX();
     int pc_y = getPC().getPosition().getY();
@@ -232,11 +242,11 @@ Point Dungeon:: get_next_intelligent_move(NPC &npc, int tunneling){
     return p;
 }
 
-Point Dungeon:: get_next_unintelligent_move(NPC &npc, int tunneling){
-    int m_x = npc.getPosition().getX();
-    int m_y = npc.getPosition().getY();
-    int m_pc_x = npc.getPCPostion().getX();
-    int m_pc_y = npc.getPCPostion().getY();
+Point Dungeon:: get_next_unintelligent_move(NPC *npc, int tunneling){
+    int m_x = npc->getPosition().getX();
+    int m_y = npc->getPosition().getY();
+    int m_pc_x = npc->getPCPostion().getX();
+    int m_pc_y = npc->getPCPostion().getY();
 
     int pc_x = getPC().getPosition().getX();
     int pc_y = getPC().getPosition().getY();
@@ -273,52 +283,24 @@ Point Dungeon:: get_next_unintelligent_move(NPC &npc, int tunneling){
     return p;
 }
 
-int Dungeon:: move_non_tunnel(NPC &npc, int new_x, int new_y){
-    // int m_x = npc.getPosition().getX();
-    // int m_y = npc.getPosition().getY();
-    // int m_pc_x = npc.getPCPostion().getX();
-    // int m_pc_y = npc.getPCPostion().getY();
-
-    // int pc_x = getPC().getPosition().getX();
-    // int pc_y = getPC().getPosition().getY();
-
+int Dungeon:: move_non_tunnel(NPC *npc, int new_x, int new_y){
+    // Check if the new position is within bounds
     if (!is_valid_move_non_tunnel(new_x, new_y)) return 0;
 
     // Check if the new cell is occupied, and kill the occupant
-    if (
-        getNPCID(new_x, new_y) != -1 || pc.getPosition() == Point(new_x, new_y)
-    ){
-        if (
-            // getGrid()[new_y][new_x].getType() == PLAYER 
-            pc.getPosition() == Point(new_x, new_y)
-        ){
-            // kill player and return cell to original type
-            // printf("Monster %c killed the player\n", m->symbol);
-            pc.setAlive(false);
-            // modifyGrid()[new_y][new_x].setType(getPC().getCurrentCell().getType());
-        }
-        else{
-            // printf("Monster %c killed a monster %c\n", m->symbol, d->grid[new_y][new_x].type);
-            killNPC(new_x, new_y);
-        }
+    int occupantID = getNPCID(new_x, new_y);
+    if (occupantID != -1) {
+        killNPC(new_x, new_y);
+    } else if (pc.getPosition() == Point(new_x, new_y)) {
+        killPC();
     }
 
-    // printf("Monster %c moved from (%d, %d) to (%d, %d)\n", m->symbol, m->x, m->y, new_x, new_y);
-
-    // d->grid[m->y][m->x].type = m->curr_cell;   // return the cell to its original type
-    // m->curr_cell = d->grid[new_y][new_x].type; // update the current cell type to the new cell type
-    // d->grid[new_y][new_x].type = m->symbol;    // update the new cell to the monster's symbol
-    // m->x = new_x, m->y = new_y;                // update the monster's position
-
-    // modifyGrid()[m_y][m_x].setType(npc.getCurrentCell().getType()); // return the cell to its original type
-    // npc.setCurrentCell(getGrid()[new_y][new_x]); // update the current cell
-    // modifyGrid()[new_y][new_x].setType(npc.getSymbol()); // update the grid with the monster type
-    npc.setPosition(Point(new_x, new_y)); // update the monster position
+    npc->setPosition(Point(new_x, new_y)); // update the monster position
 
     return 0;
 }
 
-int Dungeon:: move_tunnel(NPC &npc, int new_x, int new_y){
+int Dungeon:: move_tunnel(NPC *npc, int new_x, int new_y){
     if (!is_valid_move_tunnel(new_x, new_y))
         return 0;
 
@@ -328,10 +310,7 @@ int Dungeon:: move_tunnel(NPC &npc, int new_x, int new_y){
         getGrid()[new_y][new_x].getHardness() > 0
     ){
         // kill player, should only occur if player teleports into rock
-        if (
-            // grid[new_y][new_x].getType() == PLAYER
-            pc.getPosition() == Point(new_x, new_y)
-        ){
+        if (pc.getPosition() == Point(new_x, new_y)){
             pc.setAlive(false);
         }
 
@@ -368,28 +347,28 @@ int Dungeon:: move_tunnel(NPC &npc, int new_x, int new_y){
     return 0;
 }
 
-bool Dungeon:: moveNPC(NPC &npc){
+bool Dungeon:: moveNPC(NPC *npc){
     int new_x, new_y;
 
-    int intelligent = npc.getIntelligent(), telepathy = npc.getTelepathy();
-    int tunneling = npc.getTunneling(), erratic = npc.getErratic();
+    int intelligent = npc->getIntelligent(), telepathy = npc->getTelepathy();
+    int tunneling = npc->getTunneling(), erratic = npc->getErratic();
 
     // Update monster's knowledge of PC position
-    if (telepathy || hasLineOfSight(npc.getPosition().getX(), npc.getPosition().getY()))
+    if (telepathy || hasLineOfSight(npc->getPosition().getX(), npc->getPosition().getY()))
     {
         // Monster can see the PC through telepathy or direct line of sight
-        npc.setPCPosition(Point(getPC().getPosition().getX(), getPC().getPosition().getY()));
+        npc->setPCPosition(Point(getPC().getPosition().getX(), getPC().getPosition().getY()));
     }
     else if (!intelligent)
     {
         // Non-intelligent monsters forget PC position when out of sight
-        npc.setPCPosition(Point(-1, -1));
+        npc->setPCPosition(Point(-1, -1));
     }
 
 
     if (erratic && rand() % 2 == 1)
     { // erratic random movement, 50% chance
-        Point p = get_next_random_move(npc.getPosition().getX(), npc.getPosition().getY(), tunneling);
+        Point p = get_next_random_move(npc->getPosition().getX(), npc->getPosition().getY(), tunneling);
         new_x = p.getX();
         new_y = p.getY();
     }
@@ -410,7 +389,7 @@ bool Dungeon:: moveNPC(NPC &npc){
     }
 
     // Check if the monster is trying to move to the same cell, if so, do nothing
-    if (new_x == npc.getPosition().getX() && new_y == npc.getPosition().getY()){
+    if (new_x == npc->getPosition().getX() && new_y == npc->getPosition().getY()){
         // printf("Monster %c is trying to move to the same cell (%d, %d)\n", m->symbol, new_x, new_y);
         return 0; // No movement
     }

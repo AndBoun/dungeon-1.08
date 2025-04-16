@@ -13,8 +13,8 @@ int ui::handle_monster_list(Dungeon &d){
     int idx = 0;
     NPC alive [d.getNumMonsters()];
     for (size_t i = 0; i < d.getNPCs().size(); i++){
-        if (d.getNPCs()[i].isAlive()) {
-            alive[idx++] = d.getNPCs()[i];
+        if (d.getNPCs()[i]->isAlive()) {
+            alive[idx++] = *d.getNPCs()[i];
         }
     }
 

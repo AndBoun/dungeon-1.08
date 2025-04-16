@@ -43,7 +43,7 @@ NPC::NPC(Point position, bool isAlive, int ID){
 
 int Dungeon::getNPCID(int x, int y) const{
     for (size_t i = 0; i < npcs.size(); i++){
-        if (npcs[i].getPosition().getX() == x && npcs[i].getPosition().getY() == y){
+        if (npcs[i]->getPosition().getX() == x && npcs[i]->getPosition().getY() == y){
             return i;
         }
     }
@@ -53,25 +53,3 @@ int Dungeon::getNPCID(int x, int y) const{
 int Dungeon::getNPCID(Point p) const{
     return getNPCID(p.getX(), p.getY());
 }
-
-// std::ostream &NPC::print(std::ostream &os) const {
-//     os << NPC_BEGIN_MONSTER;
-//     os << "\n" << NPC_NAME << " " << name;
-//     os << "\n" << NPC_DESC << "\n" << desc;
-//     os << ".";
-//     os << "\n" << NPC_COLOR << " ";
-//     for (const auto &c : color) {
-//         os << c << " ";
-//     }
-//     os << "\n" << NPC_SPEED << " " << dice_speed;
-//     os << "\n" << NPC_ABIL << " ";
-//     for (const auto &a : abil) {
-//         os << a << " ";
-//     }
-//     os << "\n" << NPC_HP << " " << dice_hp;
-//     os << "\n" << NPC_DAM << " " << dice_dam;
-//     os << "\n" << NPC_SYMB << " " << symb;
-//     os << "\n" << NPC_RRTY << " " << rrty;
-//     os << "\n" << NPC_END << "\n";
-//     return os;
-// }

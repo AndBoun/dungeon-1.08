@@ -16,6 +16,9 @@
 #include <character/Character.hpp>
 #include <character/PC.hpp>
 #include <character/NPC.hpp>
+#include <character/NPCDescription.hpp>
+#include <item/Item.hpp>
+#include <item/ItemDescription.hpp>
 
 #include <utils/Point.hpp>
 
@@ -57,6 +60,10 @@ const int MOVEMENT_STAIRS = -2;
 class Dungeon
 {
 public:
+    std::vector<NPCDescription> npcDescList;
+    std::vector<ItemDescription> itemDescList;
+
+
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> grid;
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> fog;
     std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT> nonTunnelingDistanceMap;
@@ -65,7 +72,7 @@ public:
     std::vector<Room> rooms;
     std::vector<Stair> up_stairs;
     std::vector<Stair> down_stairs;
-    std::vector<NPC> npcs;
+    std::vector<NPC*> npcs;
 
     PC pc;
     int numMonsterAlive;
@@ -81,7 +88,7 @@ public:
     const std::vector<Room>& getRooms () { return rooms; }
     const std::vector<Stair>& getUpStairs () { return up_stairs; }
     const std::vector<Stair>& getDownStairs () { return down_stairs; }
-    const std::vector<NPC>& getNPCs () { return npcs; }
+    const std::vector<NPC*>& getNPCs () { return npcs; }
     const std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT>& getNonTunnelingDistanceMap() { return nonTunnelingDistanceMap; }
     const std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT>& getTunnelingDistanceMap() { return tunnelingDistanceMap; }
     PC& getPC() { return pc; }
@@ -95,7 +102,7 @@ public:
     std::vector<Room>& modifyRooms () { return rooms; }
     std::vector<Stair>& modifyStairs () { return up_stairs; }
     std::vector<Stair>& modifyDownStairs () { return down_stairs; }
-    std::vector<NPC>& modifyNPCs () { return npcs; }
+    std::vector<NPC*>& modifyNPCs () { return npcs; }
     std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT>& modifyNonTunnelingDistanceMap() { return nonTunnelingDistanceMap; }
     std::array<std::array<int, DUNGEON_WIDTH>, DUNGEON_HEIGHT>& modifyTunnelingDistanceMap() { return tunnelingDistanceMap; }
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT>& modifyFog() { return fog; }
@@ -110,15 +117,18 @@ public:
     bool placeStair(int x, int y, char stairType);
     bool generateRandomStair(char stairType);
 
+    bool placeCharacterRandomly(Character *character);
     bool placeCharacterRandomly(Character &character);
+    bool placeCharacter(Character *character, int x, int y);
     bool placeCharacter(Character &character, int x, int y);
-
+    
     bool placeNPCsRandomly(int numNPCs = DEFAULT_NUM_MONSTERS);
 
     int startGameplay(int numNPCs = DEFAULT_NUM_MONSTERS);
     int movePC(int x, int y, bool teleport = false);
-    bool moveNPC(NPC &npc);
+    bool moveNPC(NPC *npc);
     bool killNPC(int x, int y);
+    bool killPC();
     
     void resetDungeon();
 
@@ -132,6 +142,8 @@ public:
     
     int getNPCID(int x, int y) const;
     int getNPCID(Point p) const;
+
+    NPC* pickRandomNPC();
 
 private:
     void initializeCells();
@@ -150,10 +162,10 @@ private:
     int is_valid_move_non_tunnel(int x, int y);
     int is_valid_move_tunnel(int x, int y);
     Point get_next_random_move(int x, int y, int tunneling);
-    Point get_next_intelligent_move(NPC &npc, int tunneling);
-    Point get_next_unintelligent_move(NPC &npc, int tunneling);
-    int move_non_tunnel(NPC &npc, int new_x, int new_y);
-    int move_tunnel(NPC &npc, int new_x, int new_y);
+    Point get_next_intelligent_move(NPC *npc, int tunneling);
+    Point get_next_unintelligent_move(NPC *npc, int tunneling);
+    int move_non_tunnel(NPC *npc, int new_x, int new_y);
+    int move_tunnel(NPC *npc, int new_x, int new_y);
 
     // void init_fog_grid();
     void update_fog_grid();

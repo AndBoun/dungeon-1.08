@@ -87,6 +87,7 @@ void ui::render_grid(const Dungeon &d, const std::array<std::array<Cell, DUNGEON
                 attron(COLOR_PAIR(COLOR_STAIR_ID));
             }
 
+            int current_npc_id = d.getNPCID(current_point);
             if ( // only render player and monsters in radius if fog is on
                 !is_fog_on || (
                     (x >= start_x && x <= end_x) &&
@@ -97,9 +98,11 @@ void ui::render_grid(const Dungeon &d, const std::array<std::array<Cell, DUNGEON
                     attron(COLOR_PAIR(COLOR_PLAYER_ID));
                     cell_type = (cell_type == '*') ? '*' : d.pc.getSymbol();
                 }
-                else if (d.getNPCID(current_point) != -1) {
-                    attron(COLOR_PAIR(COLOR_MONSTER_ID));
-                    cell_type = (cell_type == '*') ? '*' : d.npcs[d.getNPCID(current_point)].getSymbol();
+                else if (current_npc_id != -1) {
+                    int color_pair_id = 100 + (current_npc_id % 100);
+                    init_pair(color_pair_id, d.npcs[current_npc_id]->color[0], -1);
+                    attron(COLOR_PAIR(color_pair_id));
+                    cell_type = (cell_type == '*') ? '*' : d.npcs[current_npc_id]->getSymbol();
                 }
             }
             

@@ -12,6 +12,18 @@
 #include <set>
 #include <utils/Dice.hpp>
 #include <optional>
+#include <unordered_map>
+
+const std::unordered_map<std::string, int> validColorsMap = {
+    {"BLACK",   COLOR_BLACK},
+    {"RED",     COLOR_RED},
+    {"GREEN",   COLOR_GREEN},
+    {"YELLOW",  COLOR_YELLOW},
+    {"BLUE",    COLOR_BLUE},
+    {"MAGENTA", COLOR_MAGENTA},
+    {"CYAN",    COLOR_CYAN},
+    {"WHITE",   COLOR_WHITE}
+};
 
 const std::set<std::string> validColors = {
     "RED", "GREEN", "BLUE", "CYAN", "YELLOW", "MAGENTA", "WHITE", "BLACK"
@@ -33,6 +45,8 @@ public:
     Dice dice_dam;
     char symb;
     int rrty;
+
+    bool canBeGenerated = true;
 
     NPCDescription() :
         name(""),
@@ -62,6 +76,8 @@ public:
 
     // Destructor
     ~NPCDescription() {}
+
+    static NPC* createNPC(NPCDescription &npcDesc, int ID, int descID);
 
     std::ostream &print(std::ostream &os) const;
     // Stream insertion operator as friend function

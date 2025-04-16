@@ -10,6 +10,7 @@
 #include <set>
 #include <utils/Dice.hpp>
 #include <optional>
+#include <ncurses.h>
 
 const std::string NPC_HEADER = "RLG327 MONSTER DESCRIPTION 1";
 const std::string NPC_BEGIN_MONSTER = "BEGIN MONSTER";
@@ -24,28 +25,28 @@ const std::string NPC_DAM = "DAM";
 const std::string NPC_SYMB = "SYMB";
 const std::string NPC_RRTY = "RRTY";
 
-// const std::set<std::string> validColors = {
-//     "RED", "GREEN", "BLUE", "CYAN", "YELLOW", "MAGENTA", "WHITE", "BLACK"
-// };
-
-// const std::set<std::string> validAbilities = {
-//     "SMART", "TELE", "TUNNEL", "ERRATIC", "PASS", "PICKUP", "DESTROY", "UNIQ", "BOSS"
-// };
 
 class NPC : public Character
 {
 public:
-    int intelligent; // 0 or 1
-    int telepathy; // 0 or 1
-    int tunneling; // 0 or 1
-    int erratic; // 0 or 1
+    int intelligent = 0; // 0 or 1
+    int telepathy = 0; // 0 or 1
+    int tunneling = 0; // 0 or 1
+    int erratic = 0; // 0 or 1
+    int passive = 0; // 0 or 1
+    int pickUp = 0; // 0 or 1
+    int destroy = 0; // 0 or 1
+    int unique = 0; // 0 or 1
+    int boss = 0; // 0 or 1
     Point pcPosition; // Position of the PC
 
-    std::string name;
-    std::string desc;
-    std::vector<std::string> color;
+    int descID; //used to identify the monster from the description file
+
+    // std::string name;
+    // std::string desc;
+    std::vector<int> color;
     // int speed; declared in character
-    std::vector<std::string> abil;
+    // std::vector<std::string> abil; declared with above ints
     int hp;
     Dice dice_dam;
     // char symbol; declared in character
@@ -58,12 +59,6 @@ public:
     NPC(Point position, bool isAlive, int ID);
     ~NPC();
 
-    // static std::vector<NPC> NPCParser();
-
-    // std::ostream &print(std::ostream &os) const;
-    
-    // // Stream insertion operator as friend function
-    // friend std::ostream &operator<<(std::ostream &os, const NPC &npc){ return npc.print(os); }
 
     // Getters
     int getIntelligent() const { return intelligent; }
@@ -74,13 +69,6 @@ public:
 
     // Setters
     void setPCPosition(const Point& position) { pcPosition = position; }
-
-
-    // static std::string handleName(std::stringstream &ss);
-    // static std::optional<NPC> parseMonster(std::ifstream &file);
-    // static std::string handleDescription(std::ifstream &file);
-    // static std::optional<std::vector<std::string>> handleDeliniatedList(std::stringstream &ss, const std::set<std::string> &validSet);
-    // static std::optional<Dice> handleDice(std::stringstream &ss);
 };
 
 #endif

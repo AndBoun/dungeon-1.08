@@ -8,7 +8,11 @@
 #include <unistd.h>
 #include <ui/ui.hpp>
 
-Dungeon::Dungeon() {}
+Dungeon::Dungeon() {
+    npcDescList = NPCDescription::NPCParser();
+    itemDescList = ItemDescription::itemParser();
+}
+
 Dungeon::~Dungeon() {}
 
 void Dungeon::resetDungeon()
@@ -81,12 +85,12 @@ int Dungeon::startGameplay(int numNPCS){
             next_time = current_time + calculateTiming(pc.getSpeed());
         } else {
             // Check if the entity is alive, if not, skip
-            if (!npcs[entity_id - 1].isAlive()) {
+            if (!npcs[entity_id - 1]->isAlive()) {
                 pq_extract_min(pq);
                 continue;
             }
             moveNPC(npcs[entity_id - 1]);
-            next_time = current_time + calculateTiming(npcs[entity_id - 1].getSpeed());
+            next_time = current_time + calculateTiming(npcs[entity_id - 1]->getSpeed());
         }
         
         // Reschedule entity's next turn
