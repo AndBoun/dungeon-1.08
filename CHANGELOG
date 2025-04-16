@@ -1,0 +1,53 @@
+commit abb0eaffc5910f77896d55cf56193a9f24417273
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 07:07:28 2025 +0000
+
+    Update README.md to clarify item and monster regeneration after level changes
+
+commit 0557cb1b04cff17fc24a4940c846664a158eee7b
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 07:05:46 2025 +0000
+
+    clear items on every stair/level changes
+
+commit 340cedb00e0700d8754cf0e17b472aec92f97b1d
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 06:25:59 2025 +0000
+
+    Implementing item pickup for players
+
+commit ab466af79dad70db575ae7d0c72ce179ff254f05
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 05:08:39 2025 +0000
+
+    Implemented loading items into game.
+
+commit eba8b91d276a03d67b076a27cc702fc4101baba6
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Apr 15 21:51:09 2025 -0500
+
+    Refactor NPC code to use pointers, implement loading based off descriptions.
+
+commit 699e0e63083c142985df7734eece83f11c83b066
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Apr 15 19:06:38 2025 -0500
+
+    Refactor item and NPC into seperate description classes to handle parsing and obejcts seperately
+
+commit 2f96e821b9b6aa6d9d3ba3036f237a784497b893
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Apr 15 08:49:06 2025 +0000
+
+    Refactor item and NPC classes to differentiate between dices and ints. Refactored grid logic to seperate terrian and characters better.
+
+commit c857f5952316b9138238e3bc70a238b2249801f8
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Tue Apr 15 00:33:40 2025 +0000
+
+    Add dungeon-1.07
+
+commit ed0d5a2cd4fd47eceea005446c30c2b911b89bd4
+Author: Andrew Boun <167598896+AndBoun@users.noreply.github.com>
+Date:   Mon Apr 14 19:28:05 2025 -0500
+
+    Initial commit
