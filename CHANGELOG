@@ -1,3 +1,15 @@
+commit 792d745d84e2387470f0e9c85b54562c1ffe1e17
+Author: Andrew Boun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 02:16:41 2025 -0500
+
+    Update README.md
+
+commit 62966cff3c3a1922d22943c9b011510f0ce17451
+Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
+Date:   Wed Apr 16 07:15:01 2025 +0000
+
+    Add CHANGELOG to document recent commits and changes
+
 commit abb0eaffc5910f77896d55cf56193a9f24417273
 Author: AndBoun <167598896+AndBoun@users.noreply.github.com>
 Date:   Wed Apr 16 07:07:28 2025 +0000

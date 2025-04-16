@@ -17,11 +17,13 @@ Dungeon::Dungeon() {
 Dungeon::~Dungeon() {
     // Free npcs
     for (size_t i = 0; i < npcs.size(); i++){
-        delete npcs[i];
+        if (npcs[i] != nullptr) delete npcs[i];
+        npcs[i] = nullptr;
     }
     // Free items
     for (size_t i = 0; i < items.size(); i++){
-        delete items[i];
+        if (items[i] != nullptr) delete items[i];
+        items[i] = nullptr;
     }
 }
 
@@ -29,11 +31,13 @@ void Dungeon::resetDungeon()
 {
     // Free npcs
     for (size_t i = 0; i < npcs.size(); i++){
-        delete npcs[i];
+        if (npcs[i] != nullptr) delete npcs[i];
+        npcs[i] = nullptr;
     }
     // Free items
     for (size_t i = 0; i < items.size(); i++){
-        delete items[i];
+        if (items[i] != nullptr) delete items[i];
+        items[i] = nullptr;
     }
 
     // Clear rooms, stairs, and NPCs
