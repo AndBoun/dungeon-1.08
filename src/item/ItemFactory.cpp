@@ -26,6 +26,8 @@ Item *ItemDescription::createItem(ItemDescription &itemDesc, int ID, int descID)
     item->art = itemDesc.art == "TRUE" ? true : false;
     item->rrty = itemDesc.rrty;
 
+    item->type = itemDesc.type;
+
     item->ID = ID;
     item->descID = descID;
 

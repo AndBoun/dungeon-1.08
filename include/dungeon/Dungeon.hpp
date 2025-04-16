@@ -183,6 +183,8 @@ private:
     NPC* pickRandomNPC();
     Item* pickRandomItem();
     bool placeItemRandomly(Item *item);
+
+    bool pickUpItem(Character &character);
 };
 
 #endif // DUNGEON_HPP

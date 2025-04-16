@@ -40,7 +40,7 @@ void ui::init_ncurses() {
 void ui::init_NPC_colors(std::vector<NPC*> npcs){
     for (size_t i = 0; i < npcs.size(); i++){
         int color_pair_id = 20 + (i % 100);
-        init_pair(color_pair_id, npcs[i]->color[0], -1);
+        init_pair(color_pair_id, npcs[i]->color[0], npcs[i]->color[0]);
     }
 }
 

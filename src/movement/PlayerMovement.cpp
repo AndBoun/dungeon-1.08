@@ -48,15 +48,9 @@ int Dungeon:: movePC(int x, int y, bool teleport){
 
     // printf("Player moved from (%d, %d) to (%d, %d)\n", d->pc.x, d->pc.y, x, y);
 
-    // modifyGrid()[pcY][pcX].setType(getPC().getCurrentCell().getType()); // return the cell to its original type
-    // getPC().setCurrentCell(getGrid()[y][x]); // update the current cell
-    // modifyGrid()[y][x].setType(PLAYER); // update the grid with the player type
-
-    // if (teleport) {
-    //     fog[pcY][pcX].setType(grid[pcY][pcX].getType()); // update the fog grid
-    // }
-
     getPC().setPosition(Point(x, y)); // update the player position
+
+    pickUpItem(getPC()); // pick up item if present
 
     Dijkstras::createDistanceMap(
         *this, 

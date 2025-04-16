@@ -31,10 +31,6 @@ void Dungeon::resetDungeon()
     for (size_t i = 0; i < npcs.size(); i++){
         delete npcs[i];
     }
-    // Free items
-    for (size_t i = 0; i < items.size(); i++){
-        delete items[i];
-    }
 
     // Clear rooms, stairs, and NPCs
     reset_fog_grid(); // Reset the fog grid
