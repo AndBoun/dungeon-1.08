@@ -26,7 +26,7 @@ public:
     Character(Point position, int speed, char symbol, bool alive, int ID);
     virtual ~Character() {
         for (size_t i = 0; i < items.size(); i++){
-            delete items[i];
+            if (items[i] != nullptr) delete items[i];
         }
     }
 
