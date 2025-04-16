@@ -10,6 +10,7 @@
 #include <set>
 #include <utils/Dice.hpp>
 #include <optional>
+#include <item/Item.hpp>
 
 static const std::string ITEM_HEADER = "RLG327 OBJECT DESCRIPTION 1";
 static const std::string ITEM_BEGIN_OBJECT = "BEGIN OBJECT";
@@ -54,6 +55,8 @@ std::string name;
     std::string art;
     int rrty;
 
+    bool canBeGenerated = true;
+
     ItemDescription() : 
         name(""),
         desc(""),
@@ -93,6 +96,8 @@ std::string name;
     {}
 
     ~ItemDescription() {};
+
+    static Item *createItem(ItemDescription &itemDesc, int ID, int descID);
 
     static std::vector<ItemDescription> itemParser();
     std::ostream &print(std::ostream &os) const;

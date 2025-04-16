@@ -9,7 +9,7 @@ Character::Character() : position(Point()), speed(0), symbol(' '), alive(true), 
 Character::Character(Point position, int speed, char symbol, bool alive, int ID)
     : position(position), speed(speed), symbol(symbol), alive(alive), ID(ID) {}
 
-Character::~Character() {}
+// Character::~Character() {}
 
 const Point& Character::getPosition() const {
     return position;

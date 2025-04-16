@@ -16,10 +16,10 @@ class Item
 {
 public:
     Point pos;
-    std::string name;
-    std::string desc;
+    // std::string name;
+    // std::string desc;
     std::string type;
-    std::string color;
+    int color;
     int hit;
     Dice dice_dam;
     int dodge;
@@ -28,13 +28,17 @@ public:
     int speed;
     int attr;
     int val;
-    std::string art;
+    bool art;
     int rrty;
+    char symbol;
+
+    int ID;
+    int descID;
 
     Item();
-    Item(std::string name, std::string desc, std::string type, std::string color,
+    Item(std::string type, int color,
          int hit, Dice dice_dam, int dodge, int def, int weight, int speed,
-         int attr, int val, std::string art, int rrty);
+         int attr, int val, bool art, int rrty);
     ~Item();
 
 

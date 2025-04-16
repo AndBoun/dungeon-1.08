@@ -21,7 +21,8 @@ SaveLoad::SaveLoad(std::string str) : f(nullptr)
 
 SaveLoad::~SaveLoad()
 {
-    if (f) {
-        fclose(f);
-    }
+    // if (f) {
+    //     fclose(f);
+    //     f = nullptr;
+    // }
 }

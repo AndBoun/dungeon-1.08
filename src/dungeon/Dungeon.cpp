@@ -11,18 +11,38 @@
 Dungeon::Dungeon() {
     npcDescList = NPCDescription::NPCParser();
     itemDescList = ItemDescription::itemParser();
+    numItems = rand() % 11 + 10; // Random number of items between 10 and 20
 }
 
-Dungeon::~Dungeon() {}
+Dungeon::~Dungeon() {
+    // Free npcs
+    for (size_t i = 0; i < npcs.size(); i++){
+        delete npcs[i];
+    }
+    // Free items
+    for (size_t i = 0; i < items.size(); i++){
+        delete items[i];
+    }
+}
 
 void Dungeon::resetDungeon()
 {
+    // Free npcs
+    for (size_t i = 0; i < npcs.size(); i++){
+        delete npcs[i];
+    }
+    // Free items
+    for (size_t i = 0; i < items.size(); i++){
+        delete items[i];
+    }
+
     // Clear rooms, stairs, and NPCs
     reset_fog_grid(); // Reset the fog grid
     rooms.clear();
     up_stairs.clear();
     down_stairs.clear();
     npcs.clear();
+    items.clear();
     generateRandomDungeon(); // Regenerate the dungeon
 }
 
@@ -40,9 +60,12 @@ void Dungeon::generateRandomDungeon()
 }
 
 int Dungeon::startGameplay(int numNPCS){
-    // initialize_monsters(d);
-    // init_fog_grid(); // Initialize fog grid
+    
     placeNPCsRandomly(numNPCS); // Place NPCs randomly
+    placeItemsRandomly(numItems); // Place items randomly
+    ui::init_NPC_colors(npcs); // Initialize NPC colors
+    ui::init_item_colors(items); // Initialize item colors
+
     numMonsterAlive = numNPCS; // Set the number of monsters alive
     int num_entities = getNPCs().size() + 1;
 

@@ -37,6 +37,20 @@ void ui::init_ncurses() {
     init_pair(COLOR_WARNING_ID, COLOR_YELLOW, -1);          // Warning
 }
 
+void ui::init_NPC_colors(std::vector<NPC*> npcs){
+    for (size_t i = 0; i < npcs.size(); i++){
+        int color_pair_id = 20 + (i % 100);
+        init_pair(color_pair_id, npcs[i]->color[0], -1);
+    }
+}
+
+void ui::init_item_colors(std::vector<Item*> items){
+    for (size_t i = 0; i < items.size(); i++){
+        int color_pair_id = 120 + (i % 100);
+        init_pair(color_pair_id, items[i]->color, -1);
+    }
+}
+
 void ui::destroy_ncurses() {
     endwin();
 }
@@ -94,13 +108,18 @@ void ui::render_grid(const Dungeon &d, const std::array<std::array<Cell, DUNGEON
                     (y >= start_y && y <= end_y)
                 )
             ){
+                if (d.getItemID(current_point) != -1) {
+                    int item_color_pair_id = 120 + (d.getItemID(current_point) % 100);
+                    attron(COLOR_PAIR(item_color_pair_id));
+                    cell_type = (cell_type == '*') ? '*' : d.items[d.getItemID(current_point)]->symbol;
+                }
+
                 if (current_point == d.pc.getPosition()){
                     attron(COLOR_PAIR(COLOR_PLAYER_ID));
                     cell_type = (cell_type == '*') ? '*' : d.pc.getSymbol();
                 }
                 else if (current_npc_id != -1) {
-                    int color_pair_id = 100 + (current_npc_id % 100);
-                    init_pair(color_pair_id, d.npcs[current_npc_id]->color[0], -1);
+                    int color_pair_id = 20 + (current_npc_id % 100);
                     attron(COLOR_PAIR(color_pair_id));
                     cell_type = (cell_type == '*') ? '*' : d.npcs[current_npc_id]->getSymbol();
                 }
@@ -212,6 +231,7 @@ int ui::get_input(Dungeon &d) {
             case 'g':
                 // if (teleport(d)) result = 1;
                 teleport(d);
+                d.update_fog_grid();
                 if (d.getNumMonsters() == 0) result = 1; // all monsters dead, stop game by returning
                 if (d.getFogStatus()) {
                     render_grid(d, d.getFog(), true); // fog is on

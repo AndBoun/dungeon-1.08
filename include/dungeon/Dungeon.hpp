@@ -63,6 +63,8 @@ public:
     std::vector<NPCDescription> npcDescList;
     std::vector<ItemDescription> itemDescList;
 
+    std::vector<NPC*> npcs;
+    std::vector<Item*> items;
 
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> grid;
     std::array<std::array<Cell, DUNGEON_WIDTH>, DUNGEON_HEIGHT> fog;
@@ -72,10 +74,12 @@ public:
     std::vector<Room> rooms;
     std::vector<Stair> up_stairs;
     std::vector<Stair> down_stairs;
-    std::vector<NPC*> npcs;
+    
 
     PC pc;
     int numMonsterAlive;
+
+    int numItems = 10;
 
     bool isFog = true; // Flag to indicate if fog of war is enabled
     
@@ -123,6 +127,7 @@ public:
     bool placeCharacter(Character &character, int x, int y);
     
     bool placeNPCsRandomly(int numNPCs = DEFAULT_NUM_MONSTERS);
+    bool placeItemsRandomly(int numItems = 10);
 
     int startGameplay(int numNPCs = DEFAULT_NUM_MONSTERS);
     int movePC(int x, int y, bool teleport = false);
@@ -143,7 +148,11 @@ public:
     int getNPCID(int x, int y) const;
     int getNPCID(Point p) const;
 
-    NPC* pickRandomNPC();
+    int getItemID(Point p) const;
+
+
+
+    void update_fog_grid();
 
 private:
     void initializeCells();
@@ -168,8 +177,12 @@ private:
     int move_tunnel(NPC *npc, int new_x, int new_y);
 
     // void init_fog_grid();
-    void update_fog_grid();
     void reset_fog_grid(); // reset to original grid, then update fog grid
+
+
+    NPC* pickRandomNPC();
+    Item* pickRandomItem();
+    bool placeItemRandomly(Item *item);
 };
 
-#endif
+#endif // DUNGEON_HPP

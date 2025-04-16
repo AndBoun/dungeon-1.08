@@ -21,6 +21,7 @@ class ui {
         // Private member variables if needed
         static int handle_player_movement(Dungeon &d, int x, int y);
         static int print_monster_list(Dungeon &d, NPC alive[], int scroll);
+        
 
     public:
         // Constructor and destructor
@@ -41,6 +42,9 @@ class ui {
         // Input handling
         static int get_input(Dungeon &d);
         static int handle_monster_list(Dungeon &d);
+
+        static void init_NPC_colors(std::vector<NPC*> npcs);
+        static void init_item_colors(std::vector<Item*> items);
 };
 
 #endif // NCURSES_UI_HPP

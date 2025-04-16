@@ -7,6 +7,7 @@
 
 #include <utils/Point.hpp>
 #include <dungeon/base/Cell.hpp>
+#include <item/Item.hpp>
 
 class Character
 {
@@ -18,10 +19,16 @@ public:
     bool alive;
     int ID;
 
+    std::vector<Item*> items;
+
     // Constructor and Destructor
     Character();
     Character(Point position, int speed, char symbol, bool alive, int ID);
-    virtual ~Character();
+    virtual ~Character() {
+        for (size_t i = 0; i < items.size(); i++){
+            delete items[i];
+        }
+    }
 
     // Getters
     virtual const Point& getPosition() const;

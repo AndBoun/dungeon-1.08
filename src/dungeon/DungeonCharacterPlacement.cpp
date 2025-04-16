@@ -39,6 +39,7 @@ bool Dungeon::placeNPCsRandomly(int numNPCS)
     for (int i = 0; i < numNPCS; i++) {
         NPC *npc = pickRandomNPC();
         npc->ID = i;
+
         if (placeCharacterRandomly(npc)) {
             npcs.push_back(npc);
         }
