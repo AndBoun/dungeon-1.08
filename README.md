@@ -57,3 +57,4 @@ In `main.cpp`, it creates a dungeon instance, which will set up a description li
 
 
 # Example Gameplay:
+![Gameplay-1 08](https://github.com/user-attachments/assets/896063c8-cc16-4f01-b569-7ebb3150630e)
