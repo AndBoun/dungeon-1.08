@@ -47,6 +47,8 @@ Run the project:
 ## Additional Notes
 - No optional features were added for 1.08
 - Item pickup only works for the player. Move over items to pick them up.
+- Item and monsters are deleted and regenerated after each level change / stair
+	- Players don't keep their inventory after using stairs
 - The destructor in the classes cleans up dynamically allocated objects
 	- `reset_dungeon()` cleans up dynamically allocated objects explicitly, but doesn't reset everything to prepare to generate a new dungeon. It respects the current ineligible list of objects and monsters.
 
