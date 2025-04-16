@@ -2,8 +2,8 @@
 // Created By Andrew Boun on 4/2/2025
 //
 
-#include <item/Item.hpp>
-#include <character/NPC.hpp>
+#include <item/ItemDescription.hpp>
+#include <character/NPCDescription.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -11,8 +11,8 @@
 #include <vector>
 #include <optional>
 
-std::vector<Item> Item::itemParser(){
-    std::vector<Item> items;
+std::vector<ItemDescription> ItemDescription::itemParser(){
+    std::vector<ItemDescription> items;
 
     const char* home = std::getenv("HOME");
     std::string filePath = std::string(home) + "/.rlg327/object_desc.txt";
@@ -31,7 +31,7 @@ std::vector<Item> Item::itemParser(){
         if (line == ITEM_BEGIN_OBJECT){
             auto monster = parseItem(file);
             if (monster){
-                Item item = monster.value();
+                ItemDescription item = monster.value();
                 items.push_back(item);
             }
         }
@@ -40,8 +40,8 @@ std::vector<Item> Item::itemParser(){
     return items;
 }
 
-std::optional<Item> Item::parseItem(std::ifstream &file){
-    Item item;
+std::optional<ItemDescription> ItemDescription::parseItem(std::ifstream &file){
+    ItemDescription item;
     std::string line;
 
     bool name, desc, type, color, hit, dam, dodge, def, weight, speed, attr, val, art, rrty;
@@ -54,34 +54,34 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
 
         if (word == ITEM_NAME){
             if (name) return std::nullopt;
-            item.name = NPC::handleName(ss);
+            item.name = NPCDescription::handleName(ss);
             if (item.name.empty()) return std::nullopt;
             name = true;
         }
         else if (word == ITEM_DESC){
             if (desc) return std::nullopt;
-            item.desc = NPC::handleDescription(file);
+            item.desc = NPCDescription::handleDescription(file);
             if (item.desc.empty()) return std::nullopt;
             desc = true;
         }
         else if (word == ITEM_TYPE){ //TODO
             if (type) return std::nullopt;
             // ss >> item.type;
-            auto tempType = NPC::handleDeliniatedList(ss, validTypes);
+            auto tempType = NPCDescription::handleDeliniatedList(ss, validTypes);
             if (!tempType || tempType.value().size() != 1) return std::nullopt;
             item.type = tempType.value()[0];
             type = true;
         }
         else if (word == ITEM_COLOR){
             if (color) return std::nullopt;
-            auto colors = NPC::handleDeliniatedList(ss, validColors); // true for color mode
+            auto colors = NPCDescription::handleDeliniatedList(ss, validColors); // true for color mode
             if (!colors) return std::nullopt;
             item.color = colors.value()[0];
             color = true;
         }
         else if (word == ITEM_HIT){
             if (hit) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_hit = tempDice.value();
             } else {
                 return std::nullopt;
@@ -90,7 +90,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_DAM){
             if (dam) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_dam = tempDice.value();
                 dam = true;
             } else {
@@ -99,7 +99,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_DODGE){
             if (dodge) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_dodge = tempDice.value();
                 dodge = true;
             } else {
@@ -108,7 +108,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_DEF){
             if (def) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_def = tempDice.value();
                 def = true;
             } else {
@@ -117,7 +117,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_WEIGHT){
             if (weight) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_weight = tempDice.value();
                 weight = true;
             } else {
@@ -126,7 +126,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_SPEED){
             if (speed) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_speed = tempDice.value();
                 speed = true;
             } else {
@@ -135,7 +135,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_ATTR){
             if (attr) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_attr = tempDice.value();
                 attr = true;
             } else {
@@ -144,7 +144,7 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
         }
         else if (word == ITEM_VAL){
             if (val) return std::nullopt;
-            if (auto tempDice = NPC::handleDice(ss)){
+            if (auto tempDice = NPCDescription::handleDice(ss)){
                 item.dice_val = tempDice.value();
                 val = true;
             } else {
@@ -180,4 +180,27 @@ std::optional<Item> Item::parseItem(std::ifstream &file){
     }
 
     return item;
+}
+
+std::ostream &ItemDescription::print(std::ostream &os) const
+{
+    os << ITEM_BEGIN_OBJECT << "\n"
+       << ITEM_NAME << " " << name << "\n"
+       << ITEM_DESC << "\n"
+       << desc
+       << "." << "\n"
+       << ITEM_TYPE << " " << type << "\n"
+       << ITEM_COLOR << " " << color << "\n"
+       << ITEM_HIT << " " << dice_hit << "\n"
+       << ITEM_DAM << " " << dice_dam << "\n"
+       << ITEM_DODGE << " " << dice_dodge << "\n"
+       << ITEM_DEF << " " << dice_def << "\n"
+       << ITEM_WEIGHT << " " << dice_weight << "\n"
+       << ITEM_SPEED << " " << dice_speed << "\n"
+       << ITEM_ATTR << " " << dice_attr << "\n"
+       << ITEM_VAL << " " << dice_val << "\n"
+       << ITEM_ART << " " << art << "\n"
+       << ITEM_RRTY << " " << rrty << "\n"
+       << ITEM_END << "\n";
+    return os;
 }

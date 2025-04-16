@@ -24,13 +24,13 @@ const std::string NPC_DAM = "DAM";
 const std::string NPC_SYMB = "SYMB";
 const std::string NPC_RRTY = "RRTY";
 
-const std::set<std::string> validColors = {
-    "RED", "GREEN", "BLUE", "CYAN", "YELLOW", "MAGENTA", "WHITE", "BLACK"
-};
+// const std::set<std::string> validColors = {
+//     "RED", "GREEN", "BLUE", "CYAN", "YELLOW", "MAGENTA", "WHITE", "BLACK"
+// };
 
-const std::set<std::string> validAbilities = {
-    "SMART", "TELE", "TUNNEL", "ERRATIC", "PASS", "PICKUP", "DESTROY", "UNIQ", "BOSS"
-};
+// const std::set<std::string> validAbilities = {
+//     "SMART", "TELE", "TUNNEL", "ERRATIC", "PASS", "PICKUP", "DESTROY", "UNIQ", "BOSS"
+// };
 
 class NPC : public Character
 {
@@ -45,12 +45,10 @@ public:
     std::string desc;
     std::vector<std::string> color;
     // int speed; declared in character
-    Dice dice_speed;
     std::vector<std::string> abil;
     int hp;
-    Dice dice_hp;
     Dice dice_dam;
-    char symb;
+    // char symbol; declared in character
     int rrty;
 
     
@@ -60,12 +58,12 @@ public:
     NPC(Point position, bool isAlive, int ID);
     ~NPC();
 
-    static std::vector<NPC> NPCParser();
+    // static std::vector<NPC> NPCParser();
 
-    std::ostream &print(std::ostream &os) const;
+    // std::ostream &print(std::ostream &os) const;
     
-    // Stream insertion operator as friend function
-    friend std::ostream &operator<<(std::ostream &os, const NPC &npc){ return npc.print(os); }
+    // // Stream insertion operator as friend function
+    // friend std::ostream &operator<<(std::ostream &os, const NPC &npc){ return npc.print(os); }
 
     // Getters
     int getIntelligent() const { return intelligent; }
@@ -78,11 +76,11 @@ public:
     void setPCPosition(const Point& position) { pcPosition = position; }
 
 
-    static std::string handleName(std::stringstream &ss);
-    static std::optional<NPC> parseMonster(std::ifstream &file);
-    static std::string handleDescription(std::ifstream &file);
-    static std::optional<std::vector<std::string>> handleDeliniatedList(std::stringstream &ss, const std::set<std::string> &validSet);
-    static std::optional<Dice> handleDice(std::stringstream &ss);
+    // static std::string handleName(std::stringstream &ss);
+    // static std::optional<NPC> parseMonster(std::ifstream &file);
+    // static std::string handleDescription(std::ifstream &file);
+    // static std::optional<std::vector<std::string>> handleDeliniatedList(std::stringstream &ss, const std::set<std::string> &validSet);
+    // static std::optional<Dice> handleDice(std::stringstream &ss);
 };
 
 #endif

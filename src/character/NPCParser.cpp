@@ -2,15 +2,15 @@
 // Created by Andrew Boun on 4/8/25.
 //
 
-#include <character/NPC.hpp>
+#include <character/NPCDescription.hpp>
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 
-std::vector<NPC> NPC::NPCParser(){
-    std::vector<NPC> npcs;
+std::vector<NPCDescription> NPCDescription::NPCParser(){
+    std::vector<NPCDescription> npcs;
 
     const char* home = std::getenv("HOME");
     std::string filePath = std::string(home) + "/.rlg327/monster_desc.txt";
@@ -29,7 +29,7 @@ std::vector<NPC> NPC::NPCParser(){
         if (line == NPC_BEGIN_MONSTER){
             auto monster = parseMonster(file);
             if (monster){
-                NPC npc = monster.value();
+                NPCDescription npc = monster.value();
                 npcs.push_back(npc);
             }
         }
@@ -38,8 +38,8 @@ std::vector<NPC> NPC::NPCParser(){
     return npcs;
 }
 
-std::optional<NPC> NPC::parseMonster(std::ifstream &file){
-    NPC npc;
+std::optional<NPCDescription> NPCDescription::parseMonster(std::ifstream &file){
+    NPCDescription npc;
     std::string line;
 
     bool name, desc, color, speed, abil, hp, dam, symb, rrty;
@@ -143,7 +143,7 @@ std::optional<NPC> NPC::parseMonster(std::ifstream &file){
     return npc;
 }
 
-std::string NPC::handleName(std::stringstream &ss){
+std::string NPCDescription::handleName(std::stringstream &ss){
     std::string tempStr;
     std::string name;
 
@@ -159,7 +159,7 @@ std::string NPC::handleName(std::stringstream &ss){
     return name;
 }
 
-std::string NPC::handleDescription(std::ifstream &file){
+std::string NPCDescription::handleDescription(std::ifstream &file){
     std::string line;
     std::string desc;
 
@@ -177,7 +177,7 @@ std::string NPC::handleDescription(std::ifstream &file){
     return desc;
 }
 
-std::optional<std::vector<std::string>> NPC::handleDeliniatedList(std::stringstream &ss, const std::set<std::string> &validSet){
+std::optional<std::vector<std::string>> NPCDescription::handleDeliniatedList(std::stringstream &ss, const std::set<std::string> &validSet){
     std::vector<std::string> list;
     std::string word;
 
@@ -193,7 +193,7 @@ std::optional<std::vector<std::string>> NPC::handleDeliniatedList(std::stringstr
     return list;
 }
 
-std::optional<Dice> NPC::handleDice(std::stringstream &ss){
+std::optional<Dice> NPCDescription::handleDice(std::stringstream &ss){
     std::string diceStr;
     ss >> diceStr;
 
@@ -227,3 +227,24 @@ std::optional<Dice> NPC::handleDice(std::stringstream &ss){
 
 }
 
+std::ostream &NPCDescription::print(std::ostream &os) const {
+    os << NPC_BEGIN_MONSTER;
+    os << "\n" << NPC_NAME << " " << name;
+    os << "\n" << NPC_DESC << "\n" << desc;
+    os << ".";
+    os << "\n" << NPC_COLOR << " ";
+    for (const auto &c : color) {
+        os << c << " ";
+    }
+    os << "\n" << NPC_SPEED << " " << dice_speed;
+    os << "\n" << NPC_ABIL << " ";
+    for (const auto &a : abil) {
+        os << a << " ";
+    }
+    os << "\n" << NPC_HP << " " << dice_hp;
+    os << "\n" << NPC_DAM << " " << dice_dam;
+    os << "\n" << NPC_SYMB << " " << symb;
+    os << "\n" << NPC_RRTY << " " << rrty;
+    os << "\n" << NPC_END << "\n";
+    return os;
+}
