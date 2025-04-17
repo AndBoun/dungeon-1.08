@@ -5,10 +5,15 @@
 mkdir ~/.rlg327
 ```
 
+> Files within the `.rlg327` folder are provided from Iowa State University's professor, Jeremy Scheaffer
+
 Build the project:
 ```bash
 make
 ```
+
+Alternatively, use the `.devcontainer` folder to automatically build a development environment in VS Code or GitHub Codespaces. The container configuration
+will automatically copy the `.rlg327` folder into the home directory and build the project. The environment uses a Docker image of the latest stable version of Fedora and installs gcc/g++ and gdb for developing. The environment is meant to emulate Iowa State University's Pyrite server environment.
 
 ## Running configurations
 Run the project:
