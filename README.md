@@ -26,21 +26,21 @@ Run the project:
 ```plain
 /
 ├── include/
-├── character/
-│   ├── NPC.hpp
-│   └── NPCDescription.hpp
-├── item/
-│   ├── Item.hpp
-│   └── ItemDescription.hpp
+│   ├── character/
+│   │   ├── NPC.hpp
+│   │   └── NPCDescription.hpp
+│   └── item/
+│       ├── Item.hpp
+│       └── ItemDescription.hpp
 ├── src/
-├── character/
-│   └── NPCFactory.cpp
-├── dungeon/
-│   ├── DungeonCharacterPlacement.cpp
-│   └── DungeonItemPlacement.cpp
+│   ├── character/
+│   │   └── NPCFactory.cpp
+│   └── dungeon/
+│       ├── DungeonCharacterPlacement.cpp
+│       └── DungeonItemPlacement.cpp
 ├── item/
-│   ├── ItemFactory.cpp
-│   └── ItemInteractions.cpp
+│       ├── ItemFactory.cpp
+│       └── ItemInteractions.cpp
 └── main.cpp
 ```
 
