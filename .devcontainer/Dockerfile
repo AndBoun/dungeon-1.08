@@ -7,7 +7,5 @@ RUN dnf -y update && \
     dnf clean all && \
     rm -rf /var/cache/dnf
     
-COPY .rlg327 /root/.rlg327
-
 # Set the default command to bash
 CMD ["/bin/bash"]

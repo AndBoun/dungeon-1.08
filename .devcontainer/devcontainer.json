@@ -17,5 +17,5 @@
         }
     },
     
-    "postCreateCommand": "make clean && make && echo 'Container setup complete!'"    
+    "postCreateCommand": "cp -r /workspaces/dungeon-1.08/.rlg327 /root/.rlg327 && make clean && make && echo 'Container setup complete!'"    
 }
